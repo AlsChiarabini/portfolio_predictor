@@ -1,0 +1,24 @@
+# Ambiente virtuale
+.venv/
+venv/
+
+# File temporanei e cache Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Dati locali grezzi
+data/raw/
+*.zip
+
+# File di sistema
+.DS_Store
+Thumbs.db
+
+# Power BI
+*.pbix
