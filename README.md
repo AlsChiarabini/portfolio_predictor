@@ -4,6 +4,16 @@ Un progetto di classificazione per prevedere se un titolo dell'S&P500 batterà i
 
 Il modello ha performance molto elevate (ROC AUC > 0.98), ma va notato che il dataset copre solo 3 anni, quindi la validazione rolling è limitata. I risultati sono indicativi della stabilità del modello, ma richiederebbero dati su orizzonti temporali più lunghi per una valutazione robusta. Ulteriori test con modelli più semplici (es. Logistic Regression) saranno inclusi come benchmark.
 
+Dopo l’aggiunta di tre feature derivate (Momentum_vs_Volatility, Rank_Momentum_6m, Rank_Volatility), tutti i modelli testati hanno mostrato un miglioramento consistente:
+
+    AUC media: da ~0.61 a ~0.64
+
+    F1-score: da 0.56–0.57 a 0.59–0.60
+
+Questo conferma che la componente informativa relativa (ranking tra titoli) e il rapporto rischio/rendimento migliorano la capacità del modello di distinguere titoli che batteranno l’S&P500.
+
+Per ogni anno nel periodo di test, vengono salvate le 20 aziende con maggiore probabilità di outperform secondo ciascun modello. Questo consente di osservare la coerenza e l’evoluzione delle previsioni nel tempo, evitando distorsioni legate al test set fisso.
+
 ---
 
 ## 📌 Obiettivi

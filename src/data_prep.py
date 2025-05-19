@@ -30,6 +30,9 @@ def crea_dataset_clf(tickers, start="2021-01-01", end="2024-01-01"):
                 sp500_return = (benchmark.loc[t1]["Close"] / benchmark.loc[t0]["Close"]) - 1
                 stock_return = (future_close / hist.loc[t0]["Close"]) - 1
 
+                momentum = (hist.loc[t0]["Close"] / hist.iloc[max(0, i-126)]["Close"]) - 1 if i >= 126 else np.nan
+                volatility = hist["Close"].iloc[max(0, i-126):i].pct_change().std() * np.sqrt(252)
+
                 row = {
                     "ticker": ticker,
                     "date": t0,
@@ -41,11 +44,13 @@ def crea_dataset_clf(tickers, start="2021-01-01", end="2024-01-01"):
                     "Beta": info.get("beta", np.nan),
                     "MarketCap": info.get("marketCap", np.nan),
                     "DividendYield": info.get("dividendYield", np.nan),
-                    "Volatility": hist["Close"].iloc[max(0, i-126):i].pct_change().std() * np.sqrt(252),
-                    "Momentum_6m": (hist.loc[t0]["Close"] / hist.iloc[max(0, i-126)]["Close"]) - 1 if i >= 126 else np.nan,
+                    "Volatility": volatility,
+                    "Momentum_6m": momentum,
                     "Return_6m": stock_return,
                     "Return_SP500_6m": sp500_return,
-                    "Label": int(stock_return > sp500_return)
+                    "Label": int(stock_return > sp500_return),
+                    #Da qua, aggiungo 3 features tramite feature engineering, una qua e 2 successivamente
+                    "Mom_vs_Vol": momentum / volatility if volatility != 0 else np.nan,
                 }
 
                 dataset.append(row)
@@ -56,4 +61,5 @@ def crea_dataset_clf(tickers, start="2021-01-01", end="2024-01-01"):
 
     df = pd.DataFrame(dataset)
     df.dropna(inplace=True)
+
     return df

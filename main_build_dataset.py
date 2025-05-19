@@ -23,6 +23,13 @@ if __name__ == "__main__":
         print("🔄 Creo il dataset...")
         df = crea_dataset_clf(tickers)
 
+        print("📈 Aggiungo Rank features...")
+        # Calcolo rank per ogni data
+        df["Rank_Momentum_6m"] = df.groupby("date")["Momentum_6m"].rank(method="average")
+        df["Rank_Volatility"] = df.groupby("date")["Volatility"].rank(method="average")
+
+        print("✅ Rank features aggiunte e file aggiornato.")
+
         print(f"💾 Salvo dataset in '{DATA_PATH}'")
         os.makedirs("data/processed", exist_ok=True)
         df.to_csv(DATA_PATH, index=False)
